@@ -313,3 +313,11 @@ function cambiaEstado(i){
 }
 
 
+//git init
+//git status -s    ver seguimiento
+// git add nombre archivo  -> para añadirlo a temporales
+// git commit -m "mensaje"   hacemos el rpimer commit para guadar la primera copia
+// git add .   envía todos los archivos al área temporal de una
+// git log --oneline  nos muestra los commits
+//git reset --hard (identificador) volvemos a la versión del archivo que queramos
+
