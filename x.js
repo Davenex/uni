@@ -8,20 +8,12 @@ let codigo = document.getElementById("codigo");
 function validarCodigo() {
     let span = document.getElementById("validCodigo");
     //const regex = /^[A-Za-z]+$/;
-    if (!codigo.value) {
-        //alert("Por favor, introduce solo caracteres de texto."); 
-        span.style = "display:block";
-        span.innerText = "Por favor, introduce solo caracteres de texto.";
-        span.className = "text-danger";
-        codigo.className = "form-control border-input-error";
-        return false;
-    }
-    else {
+    
         span.innerText = "";
         span.style = "display:none;";
         codigo.className = "form-control border-input-ok";
         return true;
-    }
+    
 }
 codigo.addEventListener('input', validarCodigo);
 
@@ -102,11 +94,11 @@ function validarCorreo() {
 correo.addEventListener("input", validarCorreo);
 
 
-/*tarea: validar el textarea. buscar o elegir una expresion regular*/
-let descripcion = document.getElementById("descripcion");
+
+
 
 /************************** *************************************************/
-let array = []; //es un array o variable global
+let dataF = [];
 function leerForms() {
 
     let valid0 = validarCodigo();
@@ -120,15 +112,12 @@ function leerForms() {
             "codigo": codigo.value,
             "nombre": nombre.value,
             "userName": userName.value,
-            "correo": correo.value,
-            "fecha": Date(),
-            "estado": false
-
+            "correo": correo.value
         };
-        array.push(objeto); //agregar el objeto al array
-        console.table(array); // mostrar la info del array en la console
+        dataF.push(objeto); //agregar el objeto al array
+        console.table(dataF); 
         
-        actualizarTablaHtml();
+        mostrarData();
         // console.log(objeto);
     }
     //console.log(objeto);
@@ -138,91 +127,101 @@ function leerForms() {
 
 
 function myApi(){
-    let datosBody = document.getElementById('datosBody');
+  
     let url = 'https://jsonplaceholder.typicode.com/users';
     fetch(url)
         .then( response => response.json() )
-        .then( data => mostrarData(data) )
-        .catch( error => console.log(error) )
-
-    const mostrarData = (data) => {
-        console.log(data)
-        
-        datosBody.innerHTML = "";
-       // data.reverse()
-        for (let i = 0; i < data.length; i++) {     
-            //crear la fila
-            let fila = document.createElement('tr');
-            //crear la columna codigo
-            let columnaCodigo = document.createElement('td');
-            columnaCodigo.textContent = data[i].id; //pasar el dat
-            fila.appendChild(columnaCodigo); // add columna a la fila
-            
-           
-            fila.appendChild(columnaCodigo); // add columna a la fila 
-
-            //crear la columna codigo
-            let columnaNombre = document.createElement('td');
-            columnaNombre.textContent = data[i].name; //pasar el dato
-            fila.appendChild(columnaNombre); // add columna a la fila 
-
-              //crear la columna codigo
-            let columnaUser = document.createElement('td');
-            columnaUser.textContent = data[i].username; //pasar el dato
-            fila.appendChild(columnaUser); // add columna a la fila 
-
-                //crear la columna codigo
-            let columnaCorreo = document.createElement('td');
-            columnaCorreo.textContent = data[i].email; //pasar el dato
-            fila.appendChild(columnaCorreo); // add columna a la fila 
-
-
-            let columnaOPciones = document.createElement('td');
-
-            //crear boton eliminar
-            let btneliminar = document.createElement('button');
-            btneliminar.textContent = "Eliminar";
-            btneliminar.className = "btn btn-danger me-2";
-            btneliminar.addEventListener('click', function(e) {
-                //eliminar(i);
-                e.target.parentNode.parentNode.remove()
+        .then( data => {
+            dataF=[];
+            data.forEach(ob=>{
+                const data_api={
+                    codigo:ob.id,
+                    nombre:ob.name,
+                    userName:ob.username,
+                    correo:ob.email
+                };
+                dataF.push(data_api);
             });
-            function eliminar(i) {
-                array.splice(i, 1);
-                actualizarTablaHtml();
-            }
-            columnaOPciones.appendChild(btneliminar);
-            // crear otro boton
-            /*let btnMarcar = document.createElement('button');
-            btnMarcar.textContent = "Marcar";
-            btnMarcar.className = "btn btn-primary";
-            btnMarcar.addEventListener('click', function () {
-                cambiaEstado(i);
-            });*/
-            //columnaOPciones.appendChild(btneliminar);
-            //columnaOPciones.appendChild(btnMarcar);
-    
-            fila.appendChild(columnaOPciones);
-    
-    /*
-            if(array[i].estado){
-                fila.className="marcar-ok";
-            }
+            mostrarData() 
+        
+        })
+        .catch( error => console.log(error) )
+}
+const mostrarData = () => {
+      
+    let datosBody = document.getElementById('datosBody');
+    datosBody.innerHTML = "";
+   // data.reverse()
+    for (let i = 0; i < dataF.length; i++) {     
+        //crear la fila
+        let fila = document.createElement('tr');
+        //crear la columna codigo
+        let columnaCodigo = document.createElement('td');
+        columnaCodigo.textContent = dataF[i].codigo; //pasar el dat
+        fila.appendChild(columnaCodigo); // add columna a la fila
+        
+       
+        fila.appendChild(columnaCodigo); // add columna a la fila 
+
+        //crear la columna codigo
+        let columnaNombre = document.createElement('td');
+        columnaNombre.textContent = dataF[i].nombre; //pasar el dato
+        fila.appendChild(columnaNombre); // add columna a la fila 
+
+          //crear la columna codigo
+        let columnaUser = document.createElement('td');
+        columnaUser.textContent = dataF[i].userName; //pasar el dato
+        fila.appendChild(columnaUser); // add columna a la fila 
+
+            //crear la columna codigo
+        let columnaCorreo = document.createElement('td');
+        columnaCorreo.textContent = dataF[i].correo; //pasar el dato
+        fila.appendChild(columnaCorreo); // add columna a la fila 
+
+
+        let columnaOPciones = document.createElement('td');
+
+        //crear boton eliminar
+        let btneliminar = document.createElement('button');
+        btneliminar.textContent = "Eliminar";
+        btneliminar.className = "btn btn-danger me-2";
+        btneliminar.addEventListener('click', function(e) {
+            //eliminar(i);
+            e.target.parentNode.parentNode.remove()
+        });
+        
+        columnaOPciones.appendChild(btneliminar);
+        // crear otro boton
+        /*let btnMarcar = document.createElement('button');
+        btnMarcar.textContent = "Marcar";
+        btnMarcar.className = "btn btn-primary";
+        btnMarcar.addEventListener('click', function () {
+            cambiaEstado(i);
+        });*/
+        //columnaOPciones.appendChild(btneliminar);
+        //columnaOPciones.appendChild(btnMarcar);
+
+        fila.appendChild(columnaOPciones);
+
+/*
+        if(array[i].estado){
+            fila.className="marcar-ok";
+        }
 */
 
-            datosBody.appendChild(fila);
-        }
-       // document.getElementById('datosBody').innerHTML = body
-        //console.log(body)
+        datosBody.appendChild(fila);
     }
+   // document.getElementById('datosBody').innerHTML = body
+    //console.log(body)
 }
 myApi()
 let fila;
 function actualizarTablaHtml() {
    
     
-    //datosBody.innerHTML = "";
+   
     let datosBody = document.getElementById('datosBody');
+    datosBody.innerHTML = "";
    /* if (!fila) {
         fila = document.createElement('tr');
        // fila.insertAdjacentHTML('afterend', '<br>');
@@ -263,7 +262,7 @@ function actualizarTablaHtml() {
             btneliminar.className = "btn btn-danger me-2";
             btneliminar.addEventListener('click',  (e)=> {
                 //eliminar(i);
-                    console.log(e.target.parentNode.parentNode.remove())
+                    e.target.parentNode.parentNode.remove()
             });
             columnaOPciones.appendChild(btneliminar);
             // crear otro boton
@@ -278,11 +277,8 @@ function actualizarTablaHtml() {
     
             fila.appendChild(columnaOPciones);
     
-    
-            if(array[i].estado){
-                fila.className="marcar-ok";
-            }
-            //add fila al tbody de la tabla html
+           
+     
             if (!fila) {
                 fila = document.createElement('tr');
               
@@ -304,13 +300,7 @@ function eliminar(i) {
 }
 */
 
-function cambiaEstado(i){
-    array[i].estado=!array[i].estado;
-    //array[i].estado= !(false)  not, and, or
-    //array[i].estado= true;
 
-    actualizarTablaHtml();
-}
 
 
 //git init
@@ -320,4 +310,11 @@ function cambiaEstado(i){
 // git add .   envía todos los archivos al área temporal de una
 // git log --oneline  nos muestra los commits
 //git reset --hard (identificador) volvemos a la versión del archivo que queramos
+
+// github hacer nueva rama
+// git branch nueva_rama
+//git checkout nueva_rama -> cambiamos a la nueva rama
+//unir ramas. vamos al master con checlout
+// eliminar rama: git brach -d nombre_rama
+// MERGE: git merge nombre_rama
 
