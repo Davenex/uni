@@ -14,3 +14,19 @@ body{
 .marcar-ok{
     text-decoration: line-through;
 }
+.container{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+ 
+   
+}
+.f1{
+    width: 40%;
+   
+    
+}
+.f2{
+    width: 60%;
+}
+
